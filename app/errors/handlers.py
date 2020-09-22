@@ -43,6 +43,6 @@ def error_422(error):
     }), 422
 
 @errors.app_errorhandler(500)
-def not_found_error(e):
+def server_error(e):
     return jsonify(error=str(e)), 400
 

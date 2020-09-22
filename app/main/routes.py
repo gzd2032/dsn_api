@@ -1,16 +1,22 @@
 from flask import Blueprint, render_template, redirect, jsonify, abort, request
+from flask_cors import CORS, cross_origin
 from .models import db, Locations, Prefixes
-from sqlalchemy import asc, desc, func
-
-from werkzeug.exceptions import BadRequest
+from sqlalchemy import asc, desc, func, exc
 
 main = Blueprint('main', __name__)
 
+CORS(main, resources={r"/api/*": {"origins": "*"}})
+
+@main.after_request
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE')
+  return response
 
 @main.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
-
 
 @main.route('/locations', methods=['GET'])
 def get_locations():
@@ -49,11 +55,16 @@ def add_location():
         new_location = Locations(name=userinput['name'])
         new_location.insert()
         query = Locations.query.all()
-        locations = [loc.format() for loc in query]        
-    except:
-        abort (500)
+        locations = [loc.format() for loc in query]  
+        success = True      
+    except exc.IntegrityError as e:
+        success = False
+        locations = str(e.__cause__)
+        db.session.rollback()
+        abort(500)
     finally:
         return jsonify({
+            'success': success,
             'locations': locations
         })
 
@@ -92,6 +103,7 @@ def delete_locations(location_id):
             removed = "not found"
             success = False
     except:
+        db.session.rollback()
         abort (500)
     finally:
         return jsonify({
@@ -189,17 +201,21 @@ def add_prefix():
         new_prefix.insert()
         query = Prefixes.query.all()
         dsns = [dsn.format() for dsn in query]
-    except:
-        abort (500)
+        success = True
+    except exc.IntegrityError as e:
+        success = False
+        dsns = str(e.__cause__)
+        db.session.rollback()
+        abort(500)
     finally:
         return jsonify({
+            'success': success,
             'prefix_list': dsns
         })
 
 @main.route('/prefixes/<int:prefix_id>', methods=['DELETE'])
 def delete_prefixes(prefix_id):
     try:
-        print(prefix_id)
         query = Prefixes.query.filter(Prefixes.id == prefix_id).one_or_none()
         if query is not None:
             removed = query.format()
@@ -209,6 +225,7 @@ def delete_prefixes(prefix_id):
             removed = "not found"
             success = False
     except:
+        db.session.rollback()
         abort (500)
     finally:
         return jsonify({

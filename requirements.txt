@@ -10,6 +10,7 @@ contextlib2==0.6.0
 distlib==0.3.0
 distro==1.4.0
 Flask==1.1.2
+Flask-Cors==3.0.9
 Flask-DotEnv==0.1.2
 Flask-Migrate==2.5.3
 Flask-SQLAlchemy==2.4.4
