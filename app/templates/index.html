@@ -6,6 +6,43 @@
     <title>DSN API</title>
 </head>
 <body>
-    <h1>Welcome to my first attempt at create an API</h1>
+    <h1>DSN API</h1>
+    <p>Welcome to my first REST API.</p>
+    <div>
+        <h3>GET Endpoints</h3>
+        <p>'/' - This welcome page</p>
+        <p>'/locations' - returns a "locations" object that includes an array of location objects.</p>
+        <p>'/prefixes' - returns a "prefix_list" object that includes an array of prefix objects.</p>
+        <p>'/prefixes/dsn' - returns a "dsn" object with an array of available dsn prefixes.</p>
+        <p>'/prefixes/dsn/&lt;dsn_prefix&gt;' - returns a "prefix_list" object that includes an array of all dsn objects that match "dsn_prefix"</p>
+        <p>'/prefixes/comm' - returns a "comm" object with an array of commercial prefixes.</p>
+        <p>'/prefixes/comm/&lt;comm_prefix&gt;' - returns a "comm" object with an array of commercial prefixes.</p>
+        <br>
+        <h3>POST Endpoints</h3>
+        <p>'/locations' - Use this endpoint to add a new location. </p>
+        <p>{ "name": "Naval Station Rota"  }</p>
+        <p>'/prefixes' - Use this endpoint to add a new DSN prefix </p>
+        <p>{  "comm_prefix": "+49 6119 744", 
+            "description": "Germany", 
+            "dsn_prefix": "570", 
+            "location_id": 20
+        }</p>
+        <br>            
+        <h3>PATCH Endpoints</h3>
+        <p>'/locations/&lt;int:location_id&gt;' - Submit a JSON object to update the name of the location. </p>
+        <p>{ "name": "Naval Station Rota"  }</p>
+        <p>'/prefixes/&lt;int:prefix_id&gt;' - Submit a JSON object to update information for a prefix.  Ensure the location_id is a valid id. </p>
+        <p>{  "comm_prefix": "+49 6119 744", 
+            "description": "Germany", 
+            "dsn_prefix": "570", 
+            "location_id": 20
+        }</p>        
+        <br>
+        <h3>DELETE Endpoints</h3>
+        <p>'/locations/&lt;int:location_id&gt;' - Delete a location by submitting a valid location_id to the endpoint. </p>
+        <p>'/prefixes/&lt;int:prefix_id&gt;' - Delete a prefix by submitting a valid prefix_id to the endpoint. </p>
+        <br>
+    </div>
+
 </body>
 </html>

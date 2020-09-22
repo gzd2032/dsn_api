@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, redirect, jsonify, abort, request
 from flask_cors import CORS, cross_origin
 from .models import db, Locations, Prefixes
 from sqlalchemy import asc, desc, func, exc
+from sqlalchemy.orm import load_only
+
 
 main = Blueprint('main', __name__)
 
@@ -121,6 +123,30 @@ def get_prefixes():
     finally:
         return jsonify({
             'prefix_list': dsns
+        })
+
+@main.route('/prefixes/dsn', methods=['GET'])
+def get_dsn_list():
+    try:
+        query = Prefixes.query.options(load_only("dsn_prefix")).all()
+        dsns = [dsn.dsn_prefix for dsn in query]
+    except:
+        abort (500)
+    finally:
+        return jsonify({
+            'dsn': dsns
+        })
+
+@main.route('/prefixes/comm', methods=['GET'])
+def get_comm_list():
+    try:
+        query = Prefixes.query.options(load_only('comm_prefix')).all()
+        dsns = [dsn.comm_prefix for dsn in query]
+    except:
+        abort (500)
+    finally:
+        return jsonify({
+            'comm': dsns
         })
 
 @main.route('/prefixes/<int:prefix_id>', methods=['PATCH'])
