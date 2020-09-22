@@ -1,0 +1,329 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 12.4 (Ubuntu 12.4-0ubuntu0.20.04.1)
+-- Dumped by pg_dump version 12.4 (Ubuntu 12.4-0ubuntu0.20.04.1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO postgres;
+
+--
+-- Name: locations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.locations (
+    id integer NOT NULL,
+    name character varying NOT NULL
+);
+
+
+ALTER TABLE public.locations OWNER TO postgres;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.locations_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.locations_id_seq OWNER TO postgres;
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.locations_id_seq OWNED BY public.locations.id;
+
+
+--
+-- Name: prefixes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.prefixes (
+    id integer NOT NULL,
+    dsn_prefix character varying NOT NULL,
+    comm_prefix character varying NOT NULL,
+    description character varying,
+    location_id integer NOT NULL
+);
+
+
+ALTER TABLE public.prefixes OWNER TO postgres;
+
+--
+-- Name: prefixes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.prefixes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.prefixes_id_seq OWNER TO postgres;
+
+--
+-- Name: prefixes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.prefixes_id_seq OWNED BY public.prefixes.id;
+
+
+--
+-- Name: locations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locations ALTER COLUMN id SET DEFAULT nextval('public.locations_id_seq'::regclass);
+
+
+--
+-- Name: prefixes id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prefixes ALTER COLUMN id SET DEFAULT nextval('public.prefixes_id_seq'::regclass);
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+\.
+
+
+--
+-- Data for Name: locations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.locations (id, name) FROM stdin;
+1	Baumholder
+2	Brunssum (NL)
+3	Brussels (B)
+4	Garmisch
+5	Geilenkirchen
+6	Germersheim
+9	Illesheim
+10	Kaiserslautern
+11	Landstuhl (LRMC)
+12	Katterbach
+13	Mainz/Kastel
+14	Miesau
+15	Pirmasens
+16	Ramstein
+17	Schinnen (NL)
+18	Sembach
+19	Spangdahlem
+20	Stuttgart
+21	Vilseck
+22	Wiesbaden
+23	Ansbach, Illesheim, Katterbach
+24	Belgium
+25	Aviano
+26	RAF Lakenheath
+28	RAF Croughton
+29	RAF Mildenhall
+27	Incirlik
+31	RAF Alconbury/Molesworth
+32	Moron
+33	Lajes Field
+34	Volkel
+35	USAG BENELUX (Brussels)
+36	Chievres Air Base/Caserne Daumerie
+37	SHAPE
+38	USAG ANSBACH
+7	Grafenwoehr/Vilsek
+39	USAG Italy
+40	Schinnen
+41	NAS Sigonella
+42	NSA Geata
+43	NSA Naples
+44	Naval Station Rota
+\.
+
+
+--
+-- Data for Name: prefixes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.prefixes (id, dsn_prefix, comm_prefix, description, location_id) FROM stdin;
+4	606-255	0032-2-707		3
+5	468	0981-183		23
+7	364	0031-45-526		2
+9	IVSN 606-229	02451		5
+10	378	07274-58		6
+16	467	09841-83		9
+17	473	09841-83	Oberdachstetten Range	9
+24	486	06371-86	Dental	11
+26	488	06371-92	Elementary/Middle School	11
+27	546	0611-143-546		13
+30	523	0611-143-523		13
+32	481	06372-842		14
+34	495	06331-86		15
+38	357	0031-464-43		17
+39	496	06302-67		18
+41	544	0611-143-544		18
+43	552	0611-143-552		18
+44	549	0611-143-549		18
+45	598	0611-143-598		18
+47	529	0711-550-26	Airfield	20
+49	593	0611-143-593	Robinson Barracks	20
+51	591	0611-143-591		20
+52	431	+49 7031 15	Panzer Kaserne	20
+53	430	+49 7116 80	Patch Barracks	20
+48	420	+49 7118 19	Robinson Barracks	20
+37	480	+49 6371 47		16
+35	478	+49 6371 405		16
+36	479	+49 6371 46		16
+22	489	+49 631 536	Vogelweh, Kapaun, Pulaski Barracks	10
+46	452	+49 6565 61	Vogelweh, Kapaun, Pulaski Barracks	19
+56	632	+39 0434 30	Italy	25
+57	226	+44 1638 52	UK	26
+59	236	+44 1280 70	UK	28
+60	238	+44 1638 54	UK	29
+61	676	+90 322 316	Turkey	27
+62	672	+90 312 422	Turkey	27
+58	268	+44 1480 84	UK	31
+63	722	+34 95 584	Spain	32
+64	535	+351 295 57	Portugal	33
+65	359	+31 413 33	Netherlands	34
+54	368	+32 02717	Belgium	35
+67	361	+32 06827	Belgium	36
+68	597	+32 06825	Belgium	36
+69	423	+32 06544	Belgium	37
+70	366	+32 06532	Belgium	37
+84	336	+49 6118 16	Germany	22
+85	337	+49 6117 05	Germany	22
+25	590	+49 9811 83	Germany	38
+86	338	+49 6113 80	Germany	22
+87	537	+49 6111 43 537	Germany	22
+28	548	+49 6111 43 548	Germany	13
+29	570	+49 6119 744	Germany	13
+8	440	+49 8821 750	Germany USAG BAVARIA	7
+71	474	+49 9641 454	Germany USAG BAVARIA	7
+72	475	+49 9641 83	Germany USAG BAVARIA	7
+12	569	+49 9641 70 569	Germany USAG BAVARIA	7
+74	526	+49 9641 70 526	Germany USAG BAVARIA	7
+75	476	+49 9662 83	Germany USAG BAVARIA	7
+76	599	+49 9641 70 599	Germany USAG BAVARIA	7
+14	466	+49 9472 83	Germany USAG BAVARIA - Hohenfels	7
+78	520	+49 9472 83	Germany USAG BAVARIA - Hohenfels	7
+79	522	+49 9472 708	Germany USAG BAVARIA - Hohenfels	7
+6	485	+49 678 36	Germany	1
+81	531	+49 611 143 531	Germany	1
+42	545	+49 611 143 545	School	18
+18	483	+49 631 411	Kleber Kaserne	10
+20	484	+49 631 413	Panzer Kaserne	10
+21	493	+49 631 3406	Rhine Ordnance Barracks	10
+11	581	+49 631 411	Germersheim	10
+83	541	+49 6111 43 541		10
+31	542	+49 6111 43 542		13
+50	421	+49 7117 29	Kelley Barracks & Airfield	20
+90	634	+39 0444 71	Italy	39
+91	637	+39 0444 61	Italy	39
+92	633	+39 050 54	Italy	39
+93	360	+31 046 443	Netherlands	40
+94	626	+39 081 568	Italy	42
+95	629	+39 081 811	Italy	43
+96	727	+34 956 82	Italy	44
+\.
+
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.locations_id_seq', 44, true);
+
+
+--
+-- Name: prefixes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.prefixes_id_seq', 96, true);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: locations locations_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locations
+    ADD CONSTRAINT locations_name_key UNIQUE (name);
+
+
+--
+-- Name: locations locations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locations
+    ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: prefixes prefixes_dsn_prefix_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prefixes
+    ADD CONSTRAINT prefixes_dsn_prefix_key UNIQUE (dsn_prefix);
+
+
+--
+-- Name: prefixes prefixes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prefixes
+    ADD CONSTRAINT prefixes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: prefixes prefixes_location_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.prefixes
+    ADD CONSTRAINT prefixes_location_id_fkey FOREIGN KEY (location_id) REFERENCES public.locations(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
