@@ -31,7 +31,6 @@ class Locations(db.Model):
         }
 
     def details(self):
-        print(self.prefix_id)
         return {
             'id': self.id,
             'name': self.name,
@@ -76,19 +75,9 @@ class Prefixes(db.Model):
 
         }
     
-    def details(self):
-        return {
-            'id': self.id,
-            'description': self.description,
-            'dsn_prefix': self.dsn_prefix,
-            'comm_prefix': self.comm_prefix,
-            'location': self.locations
-        }        
-
     def short(self):
         return {
-            'id': self.id,
-            'description': self.description,
-            'dsn_prefix': self.dsn_prefix,
-            'comm_prefix': self.comm_prefix
-        }      
+            self.dsn_prefix: self.comm_prefix
+        }        
+
+

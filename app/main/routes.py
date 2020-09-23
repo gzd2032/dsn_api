@@ -74,7 +74,7 @@ def add_location():
 def get_prefixes():
     try:
         query = Prefixes.query.all()
-        dsns = [dsn.format() for dsn in query]
+        dsns = [dsn.short() for dsn in query]
     except:
         abort (500)
     finally:
