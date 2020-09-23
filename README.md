@@ -12,26 +12,27 @@ My goal was to create an API where others could freely develop a frontend to use
 
 ## Server Setup Basics
 
-This API can be used to retrieve lists of DSN prefixes with its commercial prefix equivalent and associated locations.
+This API will serve a list of DSN prefixes with its commercial prefix equivalent and associated locations.
 
 ### Installing Dependencies
 
 #### Python 3.8.2
 
-This application was built on the latest version of python 3.8.2
+This application was built on the latest version of python v3.8.2
 
 #### Virtual Enviornment
 
-In the main directory create a virtual environment: 
+If required, in the main directory create a virtual environment: 
 
 example setup using virtual env
-``` virtual env
+``` 
+virtualenv env
 source ~env/bin/activate
 ```
 
 #### PIP Dependencies
 
-Once the virtual environment is setup and running, install dependencies by  running:
+Once the virtual environment is setup and running, install dependencies by running:
 
 ```bash
 pip install -r requirements.txt
@@ -42,11 +43,12 @@ This will install all of the required packages within the `requirements.txt` fil
 ##### Key Dependencies
 
 - [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
+- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM used to send and retreive data from postgres or any compatible database server. 
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension used to handle cross origin requests from a frontend server. 
 
 ## Database Setup
-The dsn.psql file contains a backup of a postgres database with all the dsn prefixes and locations.  With Postgres running, create a database name dsn, then restore the database using the dsn.psql file. From the backend folder in terminal run:
+The dsn.psql file contains a postgres database backup of all the dsn prefixes and locations.  With Postgres running, create a database named dsn, then restore the database using the dsn.psql file. In the main directory, run the following commands in a terminal window:
+
 ```bash
 createdb dsn
 psql dsn < dsn.psql
@@ -54,8 +56,11 @@ psql dsn < dsn.psql
 
 ## Running the server
 
-In the mail directory, make sure you are working using your created virtual environment.
-To run the server, execute:
+The server requires the following environment variable:
+
+DATABASE_URL=(postgres server information)
+
+To run the server, execute the following command in the main directory:
 
 ```bash
 export FLASK_APP=app.py
@@ -66,34 +71,45 @@ flask run
 ## Endpoints
 
 ### GET Endpoints
-- '/' - This welcome page
+- '/' - Provides a standard static html page that describes the API.
 - '/locations' - returns a "locations" object that includes an array of location objects.
 - '/prefixes' - returns a "prefix_list" object that includes an array of prefix objects.
 - '/prefixes/dsn' - returns a "dsn" object with an array of available dsn prefixes.
 - '/prefixes/dsn/<dsn_prefix>' - returns a "prefix_list" object that includes an array of all dsn objects that match "dsn_prefix".  Allows partial DSN matching and returns an array of matches
-- '/prefixes/comm' - returns a "comm" object with an array of commercial prefixes.  Allows partial text matching and returns and array of matches. 
+- '/prefixes/comm' - returns a "comm" object with an array of commercial prefixes.  Allows partial text matching and returns an array of matches. 
 - '/prefixes/comm/<comm_prefix>' - returns a "comm" object with an array of commercial prefixes.
 
 ### POST Endpoints
-- '/locations' - Use this endpoint to add a new location. 
+- '/locations' - Use this endpoint to add a new location. Send JSON data in the following format:
+```
 { "name": "Naval Station Rota"  }
-- '/prefixes' - Use this endpoint to add a new DSN prefix 
+```
+
+- '/prefixes' - Use this endpoint to add a new DSN prefix.  Send JSON data in the following format:
+```
 {  "comm_prefix": "+49 6119 744", 
     "description": "Germany", 
     "dsn_prefix": "570", 
     "location_id": 20
 }
-           
+```
+
 ### PATCH Endpoints
-- '/locations/<int:location_id>' - Submit a JSON object to update the name of the location. 
+- '/locations/<int:location_id>' - Submit a JSON object to update the name of the location. Ensure the location_id in the endpoint is valid id. 
+```
 { "name": "Naval Station Rota"  }
-- '/prefixes/<int:prefix_id>' - Submit a JSON object to update information for a prefix.  Ensure the location_id is a valid id. 
+```
+
+- '/prefixes/<int:prefix_id>' - Submit a JSON object to update information for a prefix.  Ensure the prefix_id is a valid id. 
+```
 {  "comm_prefix": "+49 6119 744", 
     "description": "Germany", 
     "dsn_prefix": "570", 
     "location_id": 20
 }        
+```
 
 ### DELETE Endpoints
-- '/locations/<int:location_id>' - Delete a location by submitting a valid location_id to the endpoint. 
-- '/prefixes/&l
+- '/locations/<int:location_id>' - Delete a location by submitting a valid location_id to this endpoint. Warning! Deleting a location will also delete all prefixes associated with that location.  
+
+- '/prefixes/<int:prefix_id>' - Delete a prefix by submitting a valid prefix_id to this endpoint.
