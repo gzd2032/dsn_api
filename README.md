@@ -72,12 +72,12 @@ flask run
 
 ### GET Endpoints
 - '/' - Provides a standard static html page that describes the API.
-- '/locations' - returns a "locations" object that includes an array of location objects.
-- '/prefixes' - returns a "prefix_list" object that includes an array of prefix objects.
-- '/prefixes/dsn' - returns a "dsn" object with an array of available dsn prefixes.
-- '/prefixes/dsn/<dsn_prefix>' - returns a "prefix_list" object that includes an array of all dsn objects that match "dsn_prefix".  Allows partial DSN matching and returns an array of matches
-- '/prefixes/comm' - returns a "comm" object with an array of commercial prefixes.  Allows partial text matching and returns an array of matches. 
-- '/prefixes/comm/<comm_prefix>' - returns a "comm" object with an array of commercial prefixes.
+- '/locations' - returns a dictionary with a "locations" key and value that is an array of location dictionaries..
+- '/prefixes' - returns a dicitonary with a "prefix_list" key and a value of a dictionary of prefixes..
+- '/prefixes/dsn' - returns a dictionary with a key of "dsn" and an array of dsn prefixes.
+- '/prefixes/dsn/<dsn_prefix>' - returns a dictionary with a value of "prefix_list" and a value of an array of dictionaries of all dsn_prefixes.  Allows partial DSN matching and returns an array of matches.  Allows partial DSN matching and returns an array of matches.
+- '/prefixes/comm' - returns a dictionary with a key of "comm" and a value of an array of commercial prefixes. 
+- '/prefixes/comm/<comm_prefix>' - returns a "comm" dictionary with an array of commercial prefixes.  Allows partial number matching and returns an array of matches.
 
 ### POST Endpoints
 - '/locations' - Use this endpoint to add a new location. Send JSON data in the following format:
