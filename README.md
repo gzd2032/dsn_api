@@ -10,7 +10,7 @@ Instead of creating a monolotithic full-stack web app, i decided follow the clou
 
 My goal was to create an API where others could freely develop a frontend to use the data.
 
-## Basics
+## Server Setup Basics
 
 This API can be used to retrieve lists of DSN prefixes with its commercial prefix equivalent and associated locations.
 
@@ -46,7 +46,7 @@ This will install all of the required packages within the `requirements.txt` fil
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension used to handle cross origin requests from a frontend server. 
 
 ## Database Setup
-The dsn.psql file contains a backup of a postgres database with all the dsn prefixes and location.  With Postgres running, create a database name dsn, then restore the database using the dsn.psql file. From the backend folder in terminal run:
+The dsn.psql file contains a backup of a postgres database with all the dsn prefixes and locations.  With Postgres running, create a database name dsn, then restore the database using the dsn.psql file. From the backend folder in terminal run:
 ```bash
 createdb dsn
 psql dsn < dsn.psql
