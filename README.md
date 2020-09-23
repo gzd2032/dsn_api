@@ -1,6 +1,6 @@
 # DSN API project
 
-This is first attempt at creating an API.  
+This is my first attempt at creating an API.  
 
 
 ## Background
@@ -40,14 +40,14 @@ pip install -r requirements.txt
 
 This will install all of the required packages within the `requirements.txt` file.
 
-##### Key Dependencies
+### Key Dependencies
 
 - [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
 - [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM used to send and retreive data from postgres or any compatible database server. 
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension used to handle cross origin requests from a frontend server. 
 
 ## Database Setup
-The dsn.psql file contains a postgres database backup of all the dsn prefixes and locations.  With Postgres running, create a database named dsn, then restore the database using the dsn.psql file. In the main directory, run the following commands in a terminal window:
+The dsn.psql file contains a postgres database backup of all the dsn prefixes and locations.  With Postgres running, create a database named "dsn", then restore the database using the dsn.psql file. In the main directory, run the following commands in a terminal window:
 
 ```bash
 createdb dsn
@@ -95,12 +95,12 @@ flask run
 ```
 
 ### PATCH Endpoints
-- '/locations/<int:location_id>' - Submit a JSON object to update the name of the location. Ensure the location_id in the endpoint is valid id. 
+- '/locations/&lt;int:location_id&gt;' - Submit a JSON object to update the name of the location.  
 ```
 { "name": "Naval Station Rota"  }
 ```
 
-- '/prefixes/<int:prefix_id>' - Submit a JSON object to update information for a prefix.  Ensure the prefix_id is a valid id. 
+- '/prefixes/&lt;int:prefix_id&gt;' - Submit a JSON object to update information for a prefix.  Ensure the location_id associated with the prefix is a valid location id. 
 ```
 {  "comm_prefix": "+49 6119 744", 
     "description": "Germany", 
@@ -110,6 +110,6 @@ flask run
 ```
 
 ### DELETE Endpoints
-- '/locations/<int:location_id>' - Delete a location by submitting a valid location_id to this endpoint. Warning! Deleting a location will also delete all prefixes associated with that location.  
+- '/locations/&lt;int:location_id&gt;' - Delete a location by submitting a valid location_id to this endpoint. Warning! Deleting a location will also delete all prefixes associated with that location.  
 
-- '/prefixes/<int:prefix_id>' - Delete a prefix by submitting a valid prefix_id to this endpoint.
+- '/prefixes/&lt;int:prefix_id&gt;' - Delete a prefix by submitting a valid prefix_id to this endpoint.
