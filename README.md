@@ -75,7 +75,7 @@ flask run
 - '/locations' - returns a dictionary with a "locations" key and value that is an array of location dictionaries..
 - '/prefixes' - returns a dicitonary with a "prefix_list" key and a value of a dictionary of prefixes..
 - '/prefixes/dsn' - returns a dictionary with a key of "dsn" and an array of dsn prefixes.
-- '/prefixes/dsn/<dsn_prefix>' - returns a dictionary with a value of "prefix_list" and a value of an array of dictionaries of all dsn_prefixes.  Allows partial DSN matching and returns an array of matches.  Allows partial DSN matching and returns an array of matches.
+- '/prefixes/dsn/<dsn_prefix>' - returns a dictionary with a value of "prefix_list" and a value of an array of dictionaries of all dsn_prefixes.  Allows partial DSN matching and returns an array of matches.  
 - '/prefixes/comm' - returns a dictionary with a key of "comm" and a value of an array of commercial prefixes. 
 - '/prefixes/comm/<comm_prefix>' - returns a "comm" dictionary with an array of commercial prefixes.  Allows partial number matching and returns an array of matches.
 
