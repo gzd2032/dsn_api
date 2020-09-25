@@ -75,9 +75,5 @@ class Prefixes(db.Model):
 
         }
     
-    def short(self):
-        return {
-            self.dsn_prefix: self.comm_prefix
-        }        
 
 
