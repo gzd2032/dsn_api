@@ -2,9 +2,6 @@ from flask import Blueprint, jsonify
 
 errors = Blueprint('errors', __name__ )
 
-
-
-
 @errors.app_errorhandler(400)
 def error_400(error):
     return jsonify({

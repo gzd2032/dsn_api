@@ -68,12 +68,16 @@ class Prefixes(db.Model):
             'description': self.description,
             'dsn_prefix': self.dsn_prefix,
             'comm_prefix': self.comm_prefix,
-            'location': {
-                'name': self.locations.name,
-                'id': self.locations.id
-            }
-
+            'location': self.locations.name,
+            'location_id': self.locations.id
         }
     
+    def short(self):
+        return {
+            'id': self.id,
+            'dsn_prefix': self.dsn_prefix,
+            'comm_prefix': self.comm_prefix,
+            'location': self.locations.name
+        }
 
 
