@@ -31,14 +31,6 @@ def error_404(error):
 def error_405(e):
     return jsonify(error=str(e)), 405
 
-@errors.app_errorhandler(422)
-def error_422(error):
-    return jsonify({
-        "success": False,
-        "error": 422,
-        "message": "unprocessable data"
-    }), 422
-
 @errors.app_errorhandler(500)
 def server_error(e):
     return jsonify(error=str(e)), 400

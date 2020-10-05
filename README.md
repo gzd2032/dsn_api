@@ -12,7 +12,7 @@ My goal was to create an API where others could freely develop a frontend to use
 
 ## Server Setup Basics
 
-This API will serve a list of DSN prefixes with its commercial prefix equivalent and associated locations.
+This API will serve a list of DSN prefixes in the EUCOM AOR with its commercial prefix equivalent and associated locations.
 
 ### Installing Dependencies
 
@@ -71,45 +71,244 @@ flask run
 ## Endpoints
 
 ### GET Endpoints
-- '/' - Provides a standard static html page that describes the API.
-- '/locations' - returns a dictionary with a "locations" key and value that is an array of location dictionaries..
-- '/prefixes' - returns a dicitonary with a "prefix_list" key and a value of a dictionary of prefixes..
-- '/prefixes/dsn' - returns a dictionary with a key of "dsn" and an array of dsn prefixes.
-- '/prefixes/dsn/<dsn_prefix>' - returns a dictionary with a value of "prefix_list" and a value of an array of dictionaries of all dsn_prefixes.  Allows partial DSN matching and returns an array of matches.  
-- '/prefixes/comm' - returns a dictionary with a key of "comm" and a value of an array of commercial prefixes. 
-- '/prefixes/comm/<comm_prefix>' - returns a "comm" dictionary with an array of commercial prefixes.  Allows partial number matching and returns an array of matches.
+
+- '/' - This welcome page.
+
+- '/locations' - returns a dictionary with a "locations" key and a value that is an array of location dictionaries.
+
+Example response:  
+```
+{
+    "locations": [{
+            "id": 1, 
+            "name": "Baumholder"
+        }, {
+            "id": 2, 
+            "name": "Brunssum (NL)"
+        } 
+        ...] 
+}
+```
+- '/prefixes' - returns a dicitonary with a "prefix_list" key and a value of a dictionary of prefixes.  The DSN and Commercial prefixes are stored as strings. 
+
+Example response:  
+```
+{
+    "prefix_list": {
+    "226": "+44 1638 52:RAF Lakenheath", 
+    "236": "+44 1280 70:RAF Croughton", 
+    "336": "+49 6118 16:Wiesbaden", 
+    ... } 
+}
+```
+- '/prefixes/dsn' - returns a dictionary with a key of "dsn" and an array of DSN prefix dictionaries.  The DSN and Commercial prefixes are stored as strings. 
+
+Example response: 
+```
+{
+    "dsn": [{
+        "comm_prefix": "0611-143-546", 
+        "description": "", 
+        "dsn_prefix": "546", 
+        "id": 27, 
+        "location": "Mainz/Kastel", 
+        "location_id": 13
+    }, 
+    {
+        "comm_prefix": "0611-143-523", 
+        "description": "", 
+        "dsn_prefix": "523", 
+        "id": 30, 
+        "location": "Mainz/Kastel", 
+        "location_id": 13
+    },
+    ...]} 
+```
+
+- '/prefixes/dsn/<dsn_prefix>' - returns a dictionary with a key of "prefix_list" and a value of an array of DSN prefix dictionaries.  Allows partial DSN matching and returns an array of matches.  
+
+Example response for '/prefixes/dsn/480' :  
+```
+{
+    "prefix_list": [{
+        "comm_prefix": "+49 6371 47", 
+        "description": "", 
+        "dsn_prefix": "480", 
+        "id": 37, 
+        "location": "Ramstein", 
+        "location_id": 16
+    }]
+}
+```
+
+- '/prefixes/comm' - returns a dictionary with a key of "comm" and a value of an array of commercial prefixes.  The DSN and Commercial prefixes are stored as strings.  
+
+Example response:  
+```
+{
+    "comm": [{
+        "0611-143-546": "546"
+    }, {
+        "0611-143-523": "523"
+    }, {
+        "0611-143-552": "552"
+    }, 
+    ...]
+} 
+```
+
+- '/prefixes/comm/<comm_prefix>' - returns a an array of Commercial prefix dictionaries.  Allows partial number matching and returns an array of matches.   
+
+Example response for '/prefixes/comm/6371 47':  
+```
+{
+    "prefix_list": [{
+        "comm_prefix": "+49 6371 47", 
+        "description": "", 
+        "dsn_prefix": "480", 
+        "id": 37, 
+        "location": "Ramstein", 
+        "location_id": 16
+    },
+    ...]
+}
+```
+
+The following Endpoints require a login
+### LOGIN Endpoints
+
+- '/login' - local login to retrieve a jwt from Auth0 to modify the database
+
+- '/logout' - The users's session is cleared and returned back to '/'
+
 
 ### POST Endpoints
-- '/locations' - Use this endpoint to add a new location. Send JSON data in the following format:
+
+- '/locations' - Use this endpoint to add a new location. 
+
+Example body: 
 ```
-{ "name": "Naval Station Rota"  }
+{ 
+    "name": "Naval Station Rota" 
+}   
 ```
 
-- '/prefixes' - Use this endpoint to add a new DSN prefix.  Send JSON data in the following format:
+Example response:  
 ```
-{  "comm_prefix": "+49 6119 744", 
-    "description": "Germany", 
+{ 
+    "success": True, 
+    "name": "Naval Station Rota"  
+}
+```
+- '/prefixes' - Use this endpoint to add a new DSN prefix. Only the location_id is an integer.  All prefixes are stored as strings.  
+
+Example body: 
+```
+{ 
     "dsn_prefix": "570", 
+    "comm_prefix": "+49 6119 744", 
+    "description": "Germany", 
     "location_id": 20
+}  
+```
+
+Example response: 
+``` 
+{  
+    "success": True, 
+    "dsns": { 
+        "comm_prefix": "+49 6119 744", 
+        "description": "Germany", 
+        "comm_prefix": "+49 6119 744", 
+        "dsn_prefix": "570", 
+        "location": "Mainz/Kastel",
+        "location_id": 20
+    }
 }
 ```
 
 ### PATCH Endpoints
-- '/locations/&lt;int:location_id&gt;' - Submit a JSON object to update the name of the location.  
+
+- '/locations/<int:location_id>' - Submit a JSON object to update the name of the location. 
+
+Example body: 
 ```
-{ "name": "Naval Station Rota"  }
+{ 
+    "name": "Naval Station Rota" 
+}  
 ```
 
-- '/prefixes/&lt;int:prefix_id&gt;' - Submit a JSON object to update information for a prefix.  Ensure the location_id associated with the prefix is a valid location id. 
+Example response:  
 ```
-{  "comm_prefix": "+49 6119 744", 
-    "description": "Germany", 
+{ 
+    "success": True, 
+    "name": "Naval Station Rota"  
+}
+```
+
+- '/prefixes/<int:prefix_id>' - Submit a JSON object to update information for a prefix.  Ensure the location_id associated with the prefix is a valid location id. Only the location_id is an integer.  Both the DSN and Commercial prefixes are stored as Strings.  
+
+Example body: 
+```
+{ 
     "dsn_prefix": "570", 
+    "comm_prefix": "+49 6119 744", 
+    "description": "Germany", 
     "location_id": 20
-}        
+}  
+```
+
+Example response:  
+```
+{  
+    "success": True, 
+    "prefix_list": { 
+        "comm_prefix": "+49 6119 744", 
+        "description": "Germany", 
+        "dsn_prefix": "570", 
+        "location_id": 20
+    }
+}
 ```
 
 ### DELETE Endpoints
-- '/locations/&lt;int:location_id&gt;' - Delete a location by submitting a valid location_id to this endpoint. Warning! Deleting a location will also delete all prefixes associated with that location.  
 
-- '/prefixes/&lt;int:prefix_id&gt;' - Delete a prefix by submitting a valid prefix_id to this endpoint.
+- '/locations/<int:location_id>' - Delete a location by submitting a valid location_id to the endpoint. 
+
+Example response:  
+```
+{ 
+    "success": True, 
+    "location": {
+        "id": 1, 
+        "name": "Baumholder"
+    }
+}
+```
+
+- '/prefixes/<int:prefix_id>' - Delete a prefix by submitting a valid prefix_id to the endpoint. 
+
+Example response:  
+```
+{ 
+    "success": True, 
+    "prefix": {
+        "comm_prefix": "0611-143-523", 
+        "description": "", 
+        "dsn_prefix": "523", 
+        "id": 30, 
+        "location": "Mainz/Kastel", 
+        "location_id": 13
+    }
+} 
+```
+
+### Error Handling
+
+This API provides basic error responses. 
+
+- Error 400: Bad request. There is an error in the data submitted to the endpoint. 
+- Error 401: Permissions error. This endpoint requires the proper Authorization header. 
+- Error 404: Resource not found. The requested endpoint, page or data from the database was not found.
+- Error 405: Method not allowed.  The method submitted to the endpoint is not supported.
+- Error 500: Server error.  An error occured on the server when attempting to process your request. 
